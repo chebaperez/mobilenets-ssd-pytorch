@@ -1,0 +1,9 @@
+kaggle
+opencv-python
+tqdm
+protobuf
+cvat-cli==2.3.0
+torch
+torchvision
+pandas
+tensorboard

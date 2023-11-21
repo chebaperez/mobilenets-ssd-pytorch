@@ -32,7 +32,7 @@ parser.add_argument("--dataset_type", default="voc", type=str,
                     help='Specify dataset type. Currently support voc and open_images.')
 
 parser.add_argument('--datasets', nargs='+', help='Dataset directory path')
-parser.add_argument('--validation_dataset', help='Dataset directory path')
+parser.add_argument('--test_dataset', help='Dataset directory path')
 parser.add_argument('--balance_data', action='store_true',
                     help="Balance training data by down-sampling more frequent labels.")
 
@@ -238,16 +238,16 @@ if __name__ == '__main__':
     train_loader = DataLoader(train_dataset, args.batch_size,
                               num_workers=args.num_workers,
                               shuffle=True)
-    logging.info("Prepare Validation datasets.")
+    logging.info("Prepare test datasets.")
     if args.dataset_type == "voc":
-        val_dataset = VOCDataset(args.validation_dataset, transform=test_transform,
+        val_dataset = VOCDataset(args.test_dataset, transform=test_transform,
                                  target_transform=target_transform, is_test=True)
     elif args.dataset_type == 'open_images':
         val_dataset = OpenImagesDataset(dataset_path,
                                         transform=test_transform, target_transform=target_transform,
                                         dataset_type="test")
         logging.info(val_dataset)
-    logging.info("validation dataset size: {}".format(len(val_dataset)))
+    logging.info("Test dataset size: {}".format(len(val_dataset)))
 
     val_loader = DataLoader(val_dataset, args.batch_size,
                             num_workers=args.num_workers,

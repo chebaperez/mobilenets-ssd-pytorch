@@ -154,6 +154,7 @@ class MatchPrior(object):
             gt_boxes = torch.from_numpy(gt_boxes)
         if type(gt_labels) is np.ndarray:
             gt_labels = torch.from_numpy(gt_labels)
+                    
         boxes, labels = box_utils.assign_priors(gt_boxes, gt_labels,
                                                 self.corner_form_priors, self.iou_threshold)
         boxes = box_utils.corner_form_to_center_form(boxes)

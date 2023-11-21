@@ -56,17 +56,14 @@ class VOCDataset:
 			logging.info("VOC Labels read from file: " + str(self.class_names))
 
 		else:
-			logging.info("No labels file, using default VOC classes.")
 			# self.class_names = ('BACKGROUND',
 			# 'aeroplane', 'bicycle', 'bird', 'boat',
 			# 'bottle', 'bus', 'car', 'cat', 'chair',
 			# 'cow', 'diningtable', 'dog', 'horse',
 			# 'motorbike', 'person', 'pottedplant',
 			# 'sheep', 'sofa', 'train', 'tvmonitor')
-
-			self.class_names = ('BACKGROUND', 
-				'train', 'truck', 'traffic light', 'traffic sign', 
-				'rider', 'person', 'bus', 'bike', 'car', 'motor') 
+			self.class_names = ('BACKGROUND', 'person', 'face', 'hand') 
+			logging.info("No labels file, using default VOC classes: "+str(self.class_names))
 
 
 		self.class_dict = {class_name: i for i, class_name in enumerate(self.class_names)}
@@ -74,14 +71,20 @@ class VOCDataset:
 	def __getitem__(self, index):
 		image_id = self.ids[index]
 		boxes, labels, is_difficult = self._get_annotation(image_id)
-		if not self.keep_difficult:
-			boxes = boxes[is_difficult == 0]
-			labels = labels[is_difficult == 0]
+
 		image = self._read_image(image_id)
+		
+		# if len(labels)==0:
+		# 	return image, boxes, labels
+		# if not self.keep_difficult:
+		# 	print("PASA keep_difficult")
+		# 	boxes = boxes[is_difficult == 0]
+		# 	labels = labels[is_difficult == 0]		
 		if self.transform:
 			image, boxes, labels = self.transform(image, boxes, labels)
-		if self.target_transform:
+		if self.target_transform:		
 			boxes, labels = self.target_transform(boxes, labels)
+
 		return image, boxes, labels
 
 	def get_image(self, index):
